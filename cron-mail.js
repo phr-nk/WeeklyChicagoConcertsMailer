@@ -111,7 +111,7 @@ function startMailer() {
 
         var date = convertDate(item.date);
         mailOptions.html +=
-          "<div> <img style='width:300px; margin-left:10%; margin-top:2rem;' src='" +
+          "<div style='margin-bottom:3rem'> <img style='width:300px; margin-left:10%; margin-top:2rem;' src='" +
           item.image +
           "'/>" +
           "<span style='margin-left:5%; font-size:large; position:relative; top:-75px;'> <strong><a href='" +
@@ -124,6 +124,8 @@ function startMailer() {
           item.venue +
           "</b> </span> <br></br> </div>";
       });
+      mailOptions.html +=
+        "<p style='margin-left:10%; margin-bottom:10%;'> Want to stop receiving emails? You can <a href='https://weeklychicagoconcerts.us20.list-manage.com/unsubscribe?u=5a79c1bc237a353a275629a12&id=c3082bee34'>unsubscribe</a> here.</p>";
       mailOptions.html += "</div>";
 
       runMailchimp().then((res) => {
