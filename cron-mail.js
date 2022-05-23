@@ -114,7 +114,7 @@ function startMailer() {
           "<div style='margin-bottom:3rem'> <img style='width:300px; margin-left:10%; margin-top:2rem;' src='" +
           item.image +
           "'/>" +
-          "<span style='margin-left:5%; font-size:large; position:relative; top:-75px;'> <strong><a href='" +
+          "<span style='margin-left:3%; font-size:large; position:relative; top:-75px;'> <strong><a href='" +
           item.link +
           "'>" +
           item.name +
