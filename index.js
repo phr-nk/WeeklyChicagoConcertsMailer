@@ -1,4 +1,5 @@
 const mailer = require("./cron-mail");
+/*
 var express = require("express"),
   app = express(),
   port = process.env.PORT || 3000,
@@ -14,6 +15,8 @@ app.listen(port, () => {
   console.log(`Weekly Chicago Concerts Mailer listening on port ${port}`);
   mailer.startMailer();
 });
+*/
 
+mailer.startMailer();
 //mailer.fetchData();
 //mailer.runMailchimp();
