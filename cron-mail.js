@@ -135,7 +135,7 @@ function startMailer() {
             if (error) {
               throw error;
             } else {
-              console.log("Email successfully sent!");
+              console.log("Email successfully sent to " + res[i] + "!");
             }
           });
         }
