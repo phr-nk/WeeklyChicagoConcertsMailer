@@ -67,7 +67,7 @@ let transporter = nodemailer.createTransport({
 
 function startMailer() {
   // At 00:00 on Sunday.. 0 12 * * 1
-  cron.schedule("* * * * *", function () {
+  cron.schedule("0 12 * * 1", function () {
     console.log("---------------------");
     console.log("Running Cron Job");
 
