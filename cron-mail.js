@@ -102,7 +102,7 @@ function startMailer() {
         subject: "Concerts Coming Up in Chicago This Week",
         text: "",
         html:
-          "<div style='background-color:#f5d06a;'><h1 style='text-align: center; margin-top:3rem; text-decoration: underline;'>Upcoming Concerts</h1><br></br>",
+          "<div style='background-color:#f5d06a;font-family:'Helvetica''><h1 style='text-align: center; margin-top:3rem;'>Upcoming Concerts</h1><br></br>",
       };
 
       res.map((item, index) => {
