@@ -102,7 +102,7 @@ function startMailer() {
         subject: "Concerts Coming Up in Chicago This Week",
         text: "",
         html:
-          "<div style='background-color:#f5d06a;font-family:'Helvetica''><h1 style='text-align: center; margin-top:4rem; color: white; font: bold 52px Helvetica, Arial, Sans-Serif;text-shadow: 1px 1px #fe4902, 2px 2px #fe4902,   3px 3px #fe4902,   4px 4px #fe4902,     5px 5px wheat,   6px 6px wheat;'>Upcoming Concerts</h1><br></br>",
+          "<div style='background-color:#f5d06a;font-family:Helvetica;'><h1 style='text-align: center; margin-top:1rem; color: black; font: bold 52px Helvetica, Arial, Sans-Serif;'>Upcoming Concerts</h1><br></br>",
       };
 
       res.map((item, index) => {
@@ -129,13 +129,15 @@ function startMailer() {
       mailOptions.html += "</div>";
 
       runMailchimp().then((res) => {
+        
         for (var i in res) {
           mailOptions.to = res[i];
+          console.log("Sending to: " + res[i]);
           transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
               throw error;
             } else {
-              console.log("Email successfully sent to " + res[i] + "!");
+              console.log("Email successfully sent!");
             }
           });
         }
