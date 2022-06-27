@@ -3,6 +3,7 @@ const nodemailer = require("nodemailer");
 const axios = require("axios");
 const lastDayOfWeek = require("date-fns/lastDayOfWeek");
 const mailchimp = require("@mailchimp/mailchimp_marketing");
+const sparkPostTransport = require('nodemailer-sparkpost-transport')
 require("dotenv").config();
 
 mailchimp.setConfig({
@@ -56,14 +57,10 @@ async function fetchData() {
 }
 
 // Create mail transporter.
-let transporter = nodemailer.createTransport({
-  service: "gmail",
-  host: "smtp.gmail.com",
-  auth: {
-    user: "weeklychicagoconcerts@gmail.com",
-    pass: process.env.EMAIL_PASS,
-  },
-});
+let options = {
+  'sparkPostApiKey': process.env.SPARKPOST_API_KEY
+}
+let transporter = nodemailer.createTransport(sparkPostTransport(options));
 
 function startMailer() {
   // At 00:00 on Sunday.. 0 12 * * 1
@@ -97,7 +94,7 @@ function startMailer() {
     })
     .then((res) => {
       var mailOptions = {
-        from: "weeklychicagoconcerts@gmail.com",
+        from: "weeklychicagoconcerts@frank-lenoci.me",
         to: [],
         subject: "Concerts Coming Up in Chicago This Week",
         text: "",
@@ -128,8 +125,8 @@ function startMailer() {
         "<p style='margin-left:10%; margin-bottom:10%;'> Want to stop receiving emails? You can <a href='https://weeklychicagoconcerts.us20.list-manage.com/unsubscribe?u=5a79c1bc237a353a275629a12&id=c3082bee34'>unsubscribe</a> here.</p>";
       mailOptions.html += "</div>";
 
-      runMailchimp().then((res) => {
-        
+      runMailchimp().then((ress) => {
+        let res = ["frank.c.lenoci@gmail.com"]
         for (var i in res) {
           mailOptions.to = res[i];
           console.log("Sending to: " + res[i]);
