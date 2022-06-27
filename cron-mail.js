@@ -125,8 +125,8 @@ function startMailer() {
         "<p style='margin-left:10%; margin-bottom:10%;'> Want to stop receiving emails? You can <a href='https://weeklychicagoconcerts.us20.list-manage.com/unsubscribe?u=5a79c1bc237a353a275629a12&id=c3082bee34'>unsubscribe</a> here.</p>";
       mailOptions.html += "</div>";
 
-      runMailchimp().then((ress) => {
-        let res = ["frank.c.lenoci@gmail.com"]
+      runMailchimp().then((res) => {
+     
         for (var i in res) {
           mailOptions.to = res[i];
           console.log("Sending to: " + res[i]);
