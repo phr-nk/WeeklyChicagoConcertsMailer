@@ -94,7 +94,7 @@ function startMailer() {
     })
     .then((res) => {
       var mailOptions = {
-        from: "weeklychicagoconcerts@frank-lenoci.me",
+        from: "weeklychicagoconcerts@weeklychicagoconcerts.xyz",
         to: [],
         subject: "Concerts Coming Up in Chicago This Week",
         text: "",
