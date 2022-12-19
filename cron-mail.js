@@ -10,7 +10,7 @@ mailchimp.setConfig({
   apiKey: process.env.MAILCHIMP_API_KEY,
   server: "us20",
 });
-const url = "https://chicago-concert-api.herokuapp.com/concerts";
+const url = "https://chicagoconcertapi.onrender.com/concerts";
 
 async function runMailchimp() {
   const response = await mailchimp.lists.getListMembersInfo("c3082bee34");
