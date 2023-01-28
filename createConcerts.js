@@ -872,5 +872,6 @@ async function scrapeConcertData() {
   }
 }
 
-module.exports = { scrapeConcertData };
+module.exports.scrapeConcertData = scrapeConcertData;
+
 //console.log(data);

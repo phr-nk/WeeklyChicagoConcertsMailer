@@ -1,6 +1,6 @@
 const mailer = require("./cron-mail");
 const Sequelize = require("sequelize-cockroachdb");
-const scrapeData = require("./createConcerts");
+const { scrapeConcertData } = require("./createConcerts");
 const fs = require("fs");
 const { get } = require("prompt");
 require("dotenv").config();
@@ -76,7 +76,7 @@ const Concert = sequelize.define("concerts", {
   },
 });
 
-var data = scrapeData().then((res) => {
+var data = scrapeConcertData().then((res) => {
   Concert.sync({
     force: true,
   })
