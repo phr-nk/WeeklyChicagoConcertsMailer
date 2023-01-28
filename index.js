@@ -33,7 +33,7 @@ var sequelize = new Sequelize({
   dialectOptions: {
     ssl: {
       //For secure connection:
-      ca: fs.readFileSync("/etc/secrets//root.crt").toString(),
+      ca: fs.readFileSync("/etc/secrets/root.crt").toString(),
     },
   },
   logging: false,
