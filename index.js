@@ -3,6 +3,7 @@ const Sequelize = require("sequelize-cockroachdb");
 const { scrapeConcertData } = require("./createConcerts");
 const fs = require("fs");
 const { get } = require("prompt");
+const chromium = require("chromium");
 require("dotenv").config();
 /*
 var express = require("express"),

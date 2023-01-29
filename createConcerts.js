@@ -154,7 +154,7 @@ async function getSBLH() {
 async function getTH(returnedArtists) {
   try {
     const browser = await puppeteer.launch({
-      executablePath: "/opt/render/project/.render/chrome/opt/google/chrome/",
+      args: ["--no-sandbox"],
     });
 
     const page = await browser.newPage();
@@ -228,9 +228,7 @@ async function getTH(returnedArtists) {
 }
 async function getEB(returnedArtists) {
   try {
-    const browser = await puppeteer.launch({
-      executablePath: "/opt/render/project/.render/chrome/opt/google/chrome/",
-    });
+    const browser = await puppeteer.launch({ args: ["--no-sandbox"] });
 
     const page = await browser.newPage();
 
@@ -486,8 +484,8 @@ async function getHO(returnedArtists) {
 async function getJam(returnedArtists) {
   try {
     const browser = await puppeteer.launch({
-      executablePath: "/opt/render/project/.render/chrome/opt/google/chrome/",
       headless: true,
+      args: ["--no-sandbox"],
     });
 
     const page = await browser.newPage();
@@ -593,8 +591,8 @@ async function getJam(returnedArtists) {
 async function getBK(returnedArtists) {
   try {
     const browser = await puppeteer.launch({
-      executablePath: "/opt/render/project/.render/chrome/opt/google/chrome/",
       headless: true,
+      args: ["--no-sandbox"],
     });
 
     const page = await browser.newPage();
@@ -682,8 +680,8 @@ async function goToEventbrite(artists) {
 
 async function goToNestedSBLH(artists) {
   const browser = await puppeteer.launch({
-    executablePath: "/opt/render/project/.render/chrome/opt/google/chrome/",
     headless: true,
+    args: ["--no-sandbox"],
   });
 
   const page = await browser.newPage();
@@ -720,7 +718,10 @@ async function goToNestedSBLH(artists) {
 }
 
 async function goToNestedHO(artists) {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox"],
+  });
 
   const page = await browser.newPage();
 
@@ -764,15 +765,13 @@ async function getSub(returnedArtists) {
   try {
     const browser = await puppeteer.launch({
       headless: true,
-      executablePath: "/opt/render/project/.render/chrome/opt/google/chrome/",
       ignoreHTTPSErrors: true,
-      args: [`--window-size=340,844`],
+      args: [`--window-size=340,844`, "--no-sandbox"],
       defaultViewport: {
         width: 340,
         height: 844,
       },
     });
-
     const page = await browser.newPage();
 
     await page.goto(url_sub, { waitUntil: "networkidle0" });
