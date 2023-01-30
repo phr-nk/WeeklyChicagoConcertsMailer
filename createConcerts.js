@@ -56,7 +56,9 @@ const getAccessToken = async () => {
 const getArtistGenres = async (artist) => {
   const { access_token } = await getAccessToken();
 
-  var search_q = spotify_search + artist + "&type=artist";
+  var artist_parsed = artist.replace("(", " ").replace(")", " ");
+
+  var search_q = spotify_search + artist_parsed + "&type=artist";
 
   return fetch(search_q, {
     headers: {
@@ -113,12 +115,8 @@ async function getSBLH() {
       artist.name = $(el).children().find("h4").text();
       try {
         var date_string = $(el).children().find("span").html().split("<br>")[0];
+        date_string += ", 2023";
 
-        if (date_string.includes("Nov") || date_string.includes("Dec")) {
-          date_string += ", 2022";
-        } else {
-          date_string += ", 2023";
-        }
         var date_object = new Date(date_string);
         artist.date = date_string;
         artist.dayOfWeek = weekday[date_object.getDay()];
@@ -485,7 +483,6 @@ async function getJam(returnedArtists) {
   try {
     const browser = await puppeteer.launch({
       headless: true,
-      args: ["--no-sandbox"],
     });
 
     const page = await browser.newPage();
@@ -522,6 +519,18 @@ async function getJam(returnedArtists) {
 
     await sumbit.evaluate((b) => b.click());
 
+    await page.waitForTimeout(1000);
+
+    sumbit = await page.$(".eventList__showMore");
+
+    await sumbit.evaluate((b) => b.click());
+    console.log("Jam Productions Button Pushed");
+    await page.waitForTimeout(1000);
+
+    sumbit = await page.$(".eventList__showMore");
+
+    await sumbit.evaluate((b) => b.click());
+    console.log("Jam Productions Button Pushed");
     await page.waitForTimeout(1000);
 
     sumbit = await page.$(".eventList__showMore");
@@ -592,7 +601,6 @@ async function getBK(returnedArtists) {
   try {
     const browser = await puppeteer.launch({
       headless: true,
-      args: ["--no-sandbox"],
     });
 
     const page = await browser.newPage();
@@ -600,8 +608,12 @@ async function getBK(returnedArtists) {
     var returnedList = returnedArtists;
     var artists = [];
 
-    for (var i = 0; i <= 6; i++) {
-      await page.goto("https://www.beatkitchen.com/calendar/?twpage=" + i);
+    for (var i = 0; i <= 5; i++) {
+      if (i == 0) {
+        await page.goto("https://www.beatkitchen.com/calendar/?twpage=");
+      } else {
+        await page.goto("https://www.beatkitchen.com/calendar/?twpage=" + i);
+      }
 
       const html = await page.evaluate(() => {
         return {
@@ -766,7 +778,7 @@ async function getSub(returnedArtists) {
     const browser = await puppeteer.launch({
       headless: true,
       ignoreHTTPSErrors: true,
-      args: [`--window-size=340,844`, "--no-sandbox"],
+      args: [`--window-size=340,844`],
       defaultViewport: {
         width: 340,
         height: 844,
@@ -774,68 +786,141 @@ async function getSub(returnedArtists) {
     });
     const page = await browser.newPage();
 
-    await page.goto(url_sub, { waitUntil: "networkidle0" });
-    await page.waitForSelector(".tw-name", {
-      visible: true,
-    });
+    for (var i = 0; i <= 14; i++) {
+      await page.goto("https://www.subt.net/calendar/?twpage=" + i, {
+        waitUntil: "networkidle0",
+      });
+      await page.waitForSelector(".artisteventsname", {
+        visible: true,
+      });
 
-    const results = await page.evaluate(() => {
-      return {
-        html: document.querySelector("*").innerHTML,
-      };
-    });
+      const results = await page.evaluate(() => {
+        return {
+          html: document.querySelector("*").innerHTML,
+        };
+      });
 
-    const $ = cheerio.load(results.html);
+      const $ = cheerio.load(results.html);
 
-    var artists = returnedArtists;
+      var artists = returnedArtists;
 
-    const listItems = $(".tw-cal-event");
+      const listItems = $(".flexmedia");
 
-    listItems.each((idx, el) => {
-      const artist = {
-        name: "",
-        id: "",
-        date: "",
-        dayOfWeek: "",
-        venue: "",
-        image: "",
-        link: "",
-        time: "",
-        genres: [],
-      };
-      artist.id = idx + artists.length + 9;
-      artist.name = $(el).children().find(".tw-name").text().trim();
-      artist.date = $(el).children().find(".tw-date").children().last().text();
-      var date = new Date(artist.date);
-      var day = weekday[date.getDay()];
-      artist.dayOfWeek = day;
-      artist.image = $(el)
-        .children()
-        .find(".tw-image")
-        .children()
-        .first()
-        .children()
-        .first()
-        .attr("src");
-      artist.link = $(el)
-        .children()
-        .find(".tw-name")
-        .children()
-        .first()
-        .attr("href");
-      artist.time = $(el)
-        .children()
-        .find(".tw-event-time-complete")
-        .children()
-        .first()
-        .text();
-      artist.venue = "Subterranean";
-      artists.push(artist);
-    });
+      listItems.each((idx, el) => {
+        console.log($(el).children().find(".artisteventsname").text().trim());
+        const artist = {
+          name: "",
+          id: "",
+          date: "",
+          dayOfWeek: "",
+          venue: "",
+          image: "",
+          link: "",
+          time: "",
+          genres: [],
+        };
+        artist.id = idx + artists.length + 9;
+        artist.name = $(el).children().find(".artisteventsname").text().trim();
+        artist.date = $(el).children().find(".artisteventdate").text().trim();
+        var date = new Date(artist.date);
+        var day = weekday[date.getDay()];
+        artist.dayOfWeek = day;
+        artist.image = $(el)
+          .children()
+          .first()
+          .attr("style")
+          .replace("background-image: url('", "")
+          .replace(")'", "");
+        artist.link = $(el).children().first().attr("href");
+        artist.time = $(el)
+          .children()
+          .find(".artisteventshowtime")
+          .text()
+          .trim();
+        artist.venue = "Subterranean";
+        artists.push(artist);
+      });
+    }
     await browser.close();
     var final_artists_list = await artists_genres(artists);
 
     return final_artists_list;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function getGolden(returnedArtists) {
+  try {
+    const browser = await puppeteer.launch({
+      headless: true,
+      ignoreHTTPSErrors: true,
+      args: [`--window-size=340,844`],
+      defaultViewport: {
+        width: 340,
+        height: 844,
+      },
+    });
+    const page = await browser.newPage();
+    var artists = returnedArtists;
+    for (var i = 0; i <= 5; i++) {
+      await page.goto("https://goldendagger.com/?twpage=" + i, {
+        waitUntil: "networkidle0",
+      });
+      await page.waitForSelector(".tw-section", {
+        visible: true,
+      });
+
+      const results = await page.evaluate(() => {
+        return {
+          html: document.querySelector("*").innerHTML,
+        };
+      });
+
+      const $ = cheerio.load(results.html);
+
+      const listItems = $(".tw-section");
+
+      listItems.each((idx, el) => {
+        console.log($(el).children().find(".tw-name").text().trim());
+        const artist = {
+          name: "",
+          id: "",
+          date: "",
+          dayOfWeek: "",
+          venue: "",
+          image: "",
+          link: "",
+          time: "",
+          genres: [],
+        };
+        artist.id = idx + artists.length + 10;
+        artist.name = $(el).children().find(".tw-name").text().trim();
+        artist.date = $(el)
+          .children()
+          .find(".tw-event-date-complete")
+          .text()
+          .trim();
+        var date = new Date(artist.date);
+        var day = weekday[date.getDay()];
+        artist.dayOfWeek = day;
+        artist.image = $(el)
+          .children()
+          .find(".tw-image")
+          .children()
+          .find("img")
+          .attr("src");
+
+        artist.link = $(el).children().find(".tw-name").find("a").attr("href");
+        artist.time = $(el).children().find(".tw-event-time").text().trim();
+        artist.venue = "Golden Dagger";
+        artists.push(artist);
+      });
+    }
+    await browser.close();
+    var final_artists_list = await artists_genres(artists);
+
+    return artists;
   } catch (err) {
     console.log(err);
   }
@@ -858,27 +943,49 @@ async function scrapeConcertData() {
         return getSub(res);
       })
       .then((res) => {
+        return getGolden(res);
+      })
+      .then((res) => {
         return getBK(res);
       })
       .then((res) => {
         return getSV(res);
       })
+      .then((res) => {
+        return getTH(res);
+      })
+      .then((res) => {
+        return getEB(res);
+      })
       .catch((err) => {
         console.log(err);
       });
 
+    fs.writeFile(
+      "./my.json",
+
+      JSON.stringify(result),
+
+      function (err) {
+        if (err) {
+          console.error("Crap happens");
+        }
+      }
+    );
+
     // var res2 = await getHO(res);
 
-    var res2 = await getTH(result);
-    var res3 = await getEB(res2);
+    //var res2 = await getTH(result);
+    //var res3 = await getEB(res2);
 
     setTimeout(() => {
       console.log("Waiting");
     }, 1000);
+    result.pop();
 
     //var result3 = await getTH(result2);
 
-    return res3;
+    return result;
     // return artists4;
   } catch (err) {
     console.log(err);
