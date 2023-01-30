@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 const axios = require("axios");
 const lastDayOfWeek = require("date-fns/lastDayOfWeek");
 const mailchimp = require("@mailchimp/mailchimp_marketing");
-const sparkPostTransport = require('nodemailer-sparkpost-transport')
+const sparkPostTransport = require("nodemailer-sparkpost-transport");
 require("dotenv").config();
 
 mailchimp.setConfig({
@@ -58,8 +58,8 @@ async function fetchData() {
 
 // Create mail transporter.
 let options = {
-  'sparkPostApiKey': process.env.SPARKPOST_API_KEY
-}
+  sparkPostApiKey: process.env.SPARKPOST_API_KEY,
+};
 let transporter = nodemailer.createTransport(sparkPostTransport(options));
 
 function startMailer() {
@@ -99,7 +99,7 @@ function startMailer() {
         subject: "Concerts Coming Up in Chicago This Week",
         text: "",
         html:
-          "<div style='background-color:#f5d06a;font-family:Helvetica;'><h1 style='text-align: center; margin-top:1rem; color: black; font: bold 52px Helvetica, Arial, Sans-Serif;'>Upcoming Concerts</h1><br></br>",
+          "<div style=' background-image: url('https://raw.githubusercontent.com/phr-nk/WeeklyChicagoConcerts/main/src/assets/layered-yellow-wavesV2.png'); background-color:#f5d06a;font-family:Helvetica;'><h1 style='text-align: center; margin-top:1rem; color: black; font: Roboto, Helvetica, Arial, sans-serif;'><img style='width:150px;margin-top:0.5rem' src= 'https://raw.githubusercontent.com/phr-nk/WeeklyChicagoConcerts/main/src/assets/wcc_logo.png'> <br> Upcoming Concerts</h1><br><h4 style='text-align: center; font: Roboto, Helvetica, Arial, sans-serif;'>Made by <a href='https://www.frank-lenoci.me/#/'>Frank Lenoci</a></h4>",
       };
 
       res.map((item, index) => {
@@ -108,25 +108,30 @@ function startMailer() {
 
         var date = convertDate(item.date);
         mailOptions.html +=
-          "<div style='margin-bottom:3rem'> <img style='width:300px; margin-left:10%; margin-top:2rem;' src='" +
+          "<div style='display:flex; flex-direction: column; margin-bottom:3rem'> <img style='width:300px; margin-left:auto; margin-right:auto; margin-top:2rem;' src='" +
           item.image +
           "'/>" +
-          "<span style='margin-left:3%; font-size:large; position:relative; top:-75px;'> <strong><a href='" +
+          "<span style='margin-top: 0.5rem; margin-left:3%; text-align:center;font-size:large; position:relative; top:-75px;'> <strong><a href='" +
           item.link +
           "'>" +
           item.name +
-          "</a></strong> " +
-          date.toLocaleDateString() +
+          "</a></strong>: " +
+          item.time +
+          " ";
+        date.toLocaleDateString() +
           " <b>at " +
           item.venue +
-          "</b> </span> <br></br> </div>";
+          "</b> </span><p style='text-align:center;'>" +
+          item.genres !=
+        ""
+          ? "<strong>Genres:</strong> " + item.genres
+          : "" + "</p> <br></br> </div>";
       });
       mailOptions.html +=
-        "<p style='margin-left:10%; margin-bottom:10%;'> Want to stop receiving emails? You can <a href='https://weeklychicagoconcerts.us20.list-manage.com/unsubscribe?u=5a79c1bc237a353a275629a12&id=c3082bee34'>unsubscribe</a> here.</p>";
+        "<p style='margin-left:10%; margin-bottom:10%; font: Roboto, Helvetica, Arial, sans-serif;'> Want to stop receiving emails? You can <a href='https://weeklychicagoconcerts.us20.list-manage.com/unsubscribe?u=5a79c1bc237a353a275629a12&id=c3082bee34'>unsubscribe</a> here.</p>";
       mailOptions.html += "</div>";
 
       runMailchimp().then((res) => {
-     
         for (var i in res) {
           mailOptions.to = res[i];
           console.log("Sending to: " + res[i]);
