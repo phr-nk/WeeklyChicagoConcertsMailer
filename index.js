@@ -5,6 +5,9 @@ const fs = require("fs");
 const { get } = require("prompt");
 const chromium = require("chromium");
 require("dotenv").config();
+
+var crt_file_local = "C:/Users/Admin/AppData/Roaming/.postgresql/root.crt";
+var crt_file_cloud = "/etc/secrets/root.crt";
 /*
 var express = require("express"),
   app = express(),
@@ -23,7 +26,7 @@ app.listen(port, () => {
 });
 */
 
-//mailer.startMailer();
+mailer.startMailer();
 
 // Connect to CockroachDB through Sequelize
 var sequelize = new Sequelize({
@@ -36,7 +39,7 @@ var sequelize = new Sequelize({
   dialectOptions: {
     ssl: {
       //For secure connection:
-      ca: fs.readFileSync("/etc/secrets/root.crt").toString(),
+      ca: fs.readFileSync(crt_file_local).toString(),
     },
   },
   logging: false,
@@ -76,7 +79,7 @@ const Concert = sequelize.define("concerts", {
     type: Sequelize.STRING,
   },
 });
-
+/* 
 var data = scrapeConcertData().then((res) => {
   Concert.sync({
     force: true,
@@ -102,6 +105,6 @@ var data = scrapeConcertData().then((res) => {
       process.exit(1);
     });
 });
-
+*/
 //mailer.fetchData();
 //mailer.runMailchimp();
