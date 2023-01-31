@@ -27,7 +27,7 @@ app.listen(port, () => {
 */
 
 mailer.startMailer();
-
+/* 
 // Connect to CockroachDB through Sequelize
 var sequelize = new Sequelize({
   dialect: "postgres",
@@ -106,5 +106,6 @@ var data = scrapeConcertData().then((res) => {
     });
 });
 */
+
 //mailer.fetchData();
 //mailer.runMailchimp();
