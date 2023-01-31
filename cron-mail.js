@@ -99,7 +99,9 @@ function startMailer() {
         subject: "Concerts Coming Up in Chicago This Week",
         text: "",
         html:
-          "<div style=' width: 1200px;  background-size: 100%; background-repeat: no-repeat; background-image: url(\"https://raw.githubusercontent.com/phr-nk/WeeklyChicagoConcerts/main/src/assets/layered-yellow-wavesV2.png\"); background-color:#f5d06a;font-family:Helvetica;'>  <h1 style='text-align:center; margin-top:1rem; color: black; '> <img style='width:150px;margin-top:0.5rem' src= 'https://raw.githubusercontent.com/phr-nk/WeeklyChicagoConcerts/main/src/assets/wcc_logo.png'> <br> Upcoming Concerts</h1><br><p style='text-align:center'>Checkout future weeks at <a href='https://weeklychicagoconcerts.onrender.com/'>WeeklyChicagoConcerts.xyz</a></p><h4 style='text-align:center'>Made by <a href='https://www.frank-lenoci.me/#/'>Frank Lenoci</a></h4><br><div style=' width:1200px;background-color:#f5d06a;'>",
+          "<div style=' width: 90vw;  background-size: 100%; background-repeat: no-repeat; background-image: url(\"https://raw.githubusercontent.com/phr-nk/WeeklyChicagoConcerts/main/src/assets/layered-yellow-wavesV2.png\"); background-color:#f5d06a;font-family:Helvetica;'>  <h1 style='text-align:center; margin-top:1rem; color: black; '> <img style='width:150px;margin-top:0.5rem' src= 'https://raw.githubusercontent.com/phr-nk/WeeklyChicagoConcerts/main/src/assets/wcc_logo.png'> <br> Upcoming Concerts for the week of <span style='font-style: italic;text-decoration: underline;'>" +
+          new Date().toLocaleDateString() +
+          "</span></h1><br><p style='text-align:center; color:black;'>Checkout future weeks at <a style='color: #ed6c02;     text-shadow: -1px 0.5px 0.5px black' href='https://weeklychicagoconcerts.onrender.com/'>WeeklyChicagoConcerts.xyz</a></p><h4 style='text-align:center;color:black;'>Made by <a style='color: #ed6c02; text-shadow: -1px 0.5px 0.5px black' href='https://www.frank-lenoci.me/#/'>Frank Lenoci</a></h4><br><div style=' width:90vw;background-color:#f5d06a;'>",
       };
 
       res.map((item, index) => {
@@ -109,10 +111,10 @@ function startMailer() {
         var date = convertDate(item.date);
 
         mailOptions.html +=
-          "<div style='background-color:#f5d06a;'> <a href='https://weeklychicagoconcerts.onrender.com/'><img style=' display:block; width:300px;margin-top:2rem; margin-left:auto; margin-right:auto;' src='" +
+          "<div style='background-color:#f5d06a;'> <a style='color: #ed6c02' href='https://weeklychicagoconcerts.onrender.com/'><img style=' display:block; width:300px;margin-top:2rem; margin-left:auto; margin-right:auto;' src='" +
           item.image +
           "'/></a>" +
-          "<p style='text-align:center;'><span style='text-align:center; margin-top: 0.5rem; font-size:large;'><a href='" +
+          "<p style='text-align:center;'><span style='color:black;text-align:center; margin-top: 0.5rem; font-size:large;'><a style='text-shadow: -1px 0.5px 0.5px black;color: #ed6c02' href='" +
           item.link +
           "'>" +
           item.name +
@@ -120,9 +122,9 @@ function startMailer() {
           item.time +
           " " +
           date.toLocaleDateString() +
-          " at " +
+          " at <b>" +
           item.venue +
-          "<p style='text-align:center'>";
+          "</b><p style='color:black; text-align:center'>";
         if (item.genres != "") {
           mailOptions.html += "Genres: " + item.genres;
         } else {
@@ -131,7 +133,7 @@ function startMailer() {
         item.genres + "</p></span><p></div>";
       });
       mailOptions.html +=
-        "<p style='margin-left:10%; margin-bottom:10%; '> Want to stop receiving emails? You can <a href='https://weeklychicagoconcerts.us20.list-manage.com/unsubscribe?u=5a79c1bc237a353a275629a12&id=c3082bee34'>unsubscribe</a> here.</p>" +
+        "<p style='margin-left:10%; margin-bottom:10%; '> Want to stop receiving emails? You can <a style='color: #ed6c02' href='https://weeklychicagoconcerts.us20.list-manage.com/unsubscribe?u=5a79c1bc237a353a275629a12&id=c3082bee34'>unsubscribe</a> here.</p>" +
         "</div>";
       runMailchimp().then((res) => {
         for (var i in res) {
